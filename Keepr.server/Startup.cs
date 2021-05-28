@@ -43,15 +43,15 @@ namespace Keepr.Server
             services.AddScoped<IDbConnection>(x => CreateDbConnection());
 
             // REPOS
-            // services.AddScoped<AccountsRepository>();
-            // services.AddTransient<RestaurantsRepository>();
-            // services.AddTransient<ReviewsRepository>();
+            services.AddScoped<AccountsRepository>();
+            services.AddTransient<VaultsRepository>();
+            services.AddTransient<KeepsRepository>();
+            services.AddTransient<VaultKeepsRepository>();
             // BL
-            // services.AddScoped<AccountService>();
-            // services.AddTransient<RestaurantsService>();
-            // services.AddTransient<ReviewsService>();
-
-
+            services.AddScoped<AccountsService>();
+            services.AddTransient<VaultsService>();
+            services.AddTransient<KeepsService>();
+            services.AddTransient<VaultKeepsService>();
         }
 
         private void ConfigureCors(IServiceCollection services)

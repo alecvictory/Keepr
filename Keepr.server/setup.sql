@@ -34,4 +34,3 @@ CREATE TABLE IF NOT EXISTS vault_keeps(
   FOREIGN KEY (keepId) REFERENCES keeps(id) ON DELETE CASCADE,
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 );
-DROP TABLE vault_keeps
