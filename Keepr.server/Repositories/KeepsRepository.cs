@@ -21,11 +21,10 @@ namespace Keepr.server.Repositories
         {
             string sql = @"
             SELECT
-            v.*
+            k.*,
             a.*
             FROM keeps k
-            JOIN accounts a ON k.creatorId
-            = a.id;";
+            JOIN accounts a ON a.id = k.creatorId;";
             return _db.Query<Keep, Profile, Keep>(sql, (k, a) =>
             {
                 k.Creator = a;
@@ -37,10 +36,10 @@ namespace Keepr.server.Repositories
         {
             string sql = @"
             SELECT 
-                v.*,
+                k.*,
                 a.*
             FROM keeps k
-            JOIN accounts a ON a.id = v.creatorId
+            JOIN accounts a ON a.id = k.creatorId
             WHERE k.id = @id";
             return _db.Query<Keep, Account, Keep>(sql, (k, a) =>
             {
@@ -54,7 +53,7 @@ namespace Keepr.server.Repositories
             string sql = @"
             INSERT INTO
             keeps(name, description, img, views, shares, keeps, creatorId)
-            VALUES (@Name, @Description, @Img, @views, @Shares, @Keeps, @Ownerid);
+            VALUES (@Name, @Description, @Img, @views, @Shares, @Keeps, @Creatorid);
             SELECT LAST_INSERT_ID();";
             k.Id = _db.ExecuteScalar<int>(sql, k);
             return k;
@@ -67,7 +66,7 @@ namespace Keepr.server.Repositories
             SET
                 name = @Name,
                 description = @Description,
-                img = @Img,
+                img = @Img
             WHERE id = @Id;";
             _db.Execute(sql, k);
             return k;

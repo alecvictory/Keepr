@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 
-namespace Keepr.Server
+namespace Keepr.server
 {
     public class Startup
     {
@@ -31,65 +31,56 @@ namespace Keepr.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureCors(services);
-            ConfigureAuth(services);
-
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Keepr.Server", Version = "v1" });
-            });
-
-            services.AddScoped<IDbConnection>(x => CreateDbConnection());
-
-            // REPOS
-            services.AddScoped<AccountsRepository>();
-            services.AddTransient<VaultsRepository>();
-            services.AddTransient<KeepsRepository>();
-            services.AddTransient<VaultKeepsRepository>();
-            // BL
-            services.AddScoped<AccountsService>();
-            services.AddTransient<VaultsService>();
-            services.AddTransient<KeepsService>();
-            services.AddTransient<VaultKeepsService>();
-        }
-
-        private void ConfigureCors(IServiceCollection services)
-        {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsDevPolicy", builder =>
-                {
-                    builder
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                    .WithOrigins(new string[]{
-                        "http://localhost:8080", "http://localhost:8081"
-                    });
-                });
-            });
-        }
-
-        private void ConfigureAuth(IServiceCollection services)
-        {
+            // TODO[epic=Auth] copy/paste
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                // NOTE this must match the object structure in appsettings.json
                 options.Authority = $"https://{Configuration["Auth0:Domain"]}/";
                 options.Audience = Configuration["Auth0:Audience"];
             });
 
-        }
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsDevPolicy", builder =>
+                {
+                    builder
+                      .WithOrigins(new string[]{
+                          "http://localhost:8080",
+                                "http://localhost:8081"
+                                })
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                });
+            });
 
+            services.AddControllers();
+
+            // TRANSIENT REPOS
+            services.AddScoped<AccountsRepository>();
+            services.AddTransient<VaultsRepository>();
+            services.AddTransient<KeepsRepository>();
+            services.AddTransient<VaultKeepsRepository>();
+
+            // TRANSIENT SERVICES
+            services.AddScoped<AccountsService>();
+            services.AddTransient<VaultsService>();
+            services.AddTransient<KeepsService>();
+            services.AddTransient<VaultKeepsService>();
+
+            services.AddScoped<IDbConnection>(x => CreateDbConnection());
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Keepr.server", Version = "v1" });
+            });
+        }
         private IDbConnection CreateDbConnection()
         {
-            // NOTE this must match the object structure in appsettings.json
-            string connectionString = Configuration["db:gearhost"];
+            string connectionString = Configuration["DB:gearhost"];
             return new MySqlConnection(connectionString);
         }
 
@@ -100,18 +91,20 @@ namespace Keepr.Server
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Keepr.Server v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Keepr.server v1"));
+                // TODO[epic=Auth] Add Cors Policy when in development mode
                 app.UseCors("CorsDevPolicy");
             }
 
             app.UseHttpsRedirection();
 
-            // NOTE use to serve your built client
-            app.UseDefaultFiles();
             app.UseStaticFiles();
+
+            app.UseDefaultFiles();
 
             app.UseRouting();
 
+            // TODO[epic=Auth] Add Authenentication so bearer gets validated
             app.UseAuthentication();
 
             app.UseAuthorization();
@@ -123,4 +116,3 @@ namespace Keepr.Server
         }
     }
 }
-
