@@ -63,8 +63,8 @@ namespace Keepr.server.Repositories
         internal VaultKeep CreateVaultKeep(VaultKeep vk)
         {
             string sql = @"INSERT INTO 
-            vault_keeps(vaultId, keepId)
-            VALUES (@VaultId, @KeepId);
+            vault_keeps(vaultId, keepId, creatorId)
+            VALUES (@VaultId, @KeepId, @CreatorId);
             SELECT LAST_INSERT_ID();
             ";
 

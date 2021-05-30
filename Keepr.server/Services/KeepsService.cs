@@ -50,15 +50,20 @@ namespace Keepr.server.Services
             return _kp.UpdateKeep(k);
         }
 
+        internal List<Keep> GetKeepsByProfileId(string id)
+        {
+            return _kp.GetKeepsByProfileId(id);
+        }
+
         internal void RemoveKeep(int id, string userId)
         {
-           Keep keep = GetKeepById(id);
+            Keep keep = GetKeepById(id);
 
-           if (keep.CreatorId != userId)
-           {
-               throw new Exception("You are not the owner of this Keep");
-           }
-           _kp.Remove(id);
+            if (keep.CreatorId != userId)
+            {
+                throw new Exception("You are not the owner of this Keep");
+            }
+            _kp.Remove(id);
         }
     }
 }

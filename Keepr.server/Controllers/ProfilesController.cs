@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Keepr.server.Models;
 using Keepr.server.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace Keepr.server.Controllers
     {
 
         private readonly AccountsService _accountsService;
+        private readonly KeepsService _ks;
 
-        public ProfilesController(AccountsService accountService)
+        public ProfilesController(AccountsService accountService, KeepsService ks)
         {
             _accountsService = accountService;
+            _ks = ks;
         }
 
 
@@ -31,5 +34,18 @@ namespace Keepr.server.Controllers
             }
         }
 
+        [HttpGet("{id}/keeps")]
+        public ActionResult<List<Keep>> GetKeepsByProfileId(string id)
+        {
+            try
+            {
+                List<Keep> keeps = _ks.GetKeepsByProfileId(id);
+                return Ok(keeps);
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
