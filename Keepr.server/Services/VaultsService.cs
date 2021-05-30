@@ -61,5 +61,14 @@ namespace Keepr.server.Services
             }
             _vp.Remove(id);
         }
+
+        internal List<Vault> GetVaultsByProfileId(string id, string userInfoId)
+        {
+            if (id == userInfoId)
+            {
+                return _vp.GetVaultsByProfileId(userInfoId);
+            }
+            return _vp.GetVaultsByProfileId(id);
+        }
     }
 }

@@ -18,22 +18,6 @@ namespace Keepr.server.Controllers
             _vk = vk;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<VaultKeep>> GetVaultKeepById(int id, VaultKeep vk)
-        {
-            try
-            {
-                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                vk.CreatorId = userInfo.Id;
-                VaultKeep vaultKeep = _vk.GetVaultKeepById(id, vk);
-                return Ok(vaultKeep);
-            }
-            catch (System.Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         // CREATE VAULTKEEP
 
         [Authorize]
@@ -57,13 +41,12 @@ namespace Keepr.server.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
-
-        public async Task<ActionResult<string>> RemoveVaultKeep(int id, VaultKeep vk)
+        public async Task<ActionResult<string>> RemoveVaultKeep(int id)
         {
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                _vk.RemoveVaultKeep(id, userInfo.Id, vk);
+                _vk.RemoveVaultKeep(id, userInfo.Id);
                 return Ok("Successfully Deleted");
             }
             catch (System.Exception e)

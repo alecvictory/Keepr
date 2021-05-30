@@ -7,20 +7,20 @@ namespace Keepr.server.Services
 {
     public class VaultKeepsService
     {
-        private readonly VaultKeepsRepository _vr;
+        private readonly VaultKeepsRepository _vk;
 
-        public VaultKeepsService(VaultKeepsRepository vr)
+        public VaultKeepsService(VaultKeepsRepository vk)
         {
-            _vr = vr;
+            _vk = vk;
         }
 
-        internal List<VaultKeep> GetVaultKeeps(int id)
+        internal List<VaultKeepViewModel> GetVaultKeeps(int id)
         {
-            return _vr.GetVaultKeeps(id);
+            return _vk.GetVaultKeeps(id);
         }
-        internal VaultKeep GetVaultKeepById(int id, VaultKeep vk)
+        internal VaultKeepViewModel GetVaultKeepById(int id, VaultKeep vk)
         {
-            var v = _vr.GetVaultKeepById(id);
+            var v = _vk.GetVaultKeepById(id);
             if (v == null)
             {
                 throw new Exception("Invalid Id");
@@ -30,18 +30,17 @@ namespace Keepr.server.Services
 
         internal VaultKeep CreateVaultKeep(VaultKeep vk)
         {
-            return _vr.CreateVaultKeep(vk);
+            return _vk.CreateVaultKeep(vk);
         }
 
-        internal void RemoveVaultKeep(int id, string userId, VaultKeep vk)
+        internal void RemoveVaultKeep(int id, string creatorId)
         {
-            VaultKeep vaultKeep = GetVaultKeepById(id, vk);
-
-            if (vaultKeep.CreatorId != userId)
+            VaultKeepViewModel vk = _vk.GetVaultKeepById(id);
+            if (vk.CreatorId != creatorId)
             {
                 throw new Exception("You are not the owner of this");
             }
-            _vr.Remove(id);
+            _vk.Remove(id);
         }
     }
 }

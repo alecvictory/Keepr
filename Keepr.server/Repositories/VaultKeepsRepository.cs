@@ -16,48 +16,40 @@ namespace Keepr.server.Repositories
             _db = db;
         }
 
-        internal List<VaultKeep> GetVaultKeeps(int id)
+        internal List<VaultKeepViewModel> GetVaultKeeps(int id)
         {
             string sql = @"
                 SELECT
+                k.*,
+                v.name,
                 vk.id as vaultKeepId,
-                vk.keepId as KeepId,
+                vk.keepId as keepId,
                 vk.vaultId as vaultId
                 FROM
                 vault_keeps vk
                 JOIN vaults v ON v.id = vk.vaultId
                 JOIN keeps k ON k.id = vk.keepId
                 WHERE
-                vk.vaultId = @id;
-            ";
-            return _db.Query<VaultKeep>(sql, new { id }).ToList();
+                vk.vaultId = @id;";
+            return _db.Query<VaultKeepViewModel>(sql, new { id }).ToList();
         }
 
-        internal VaultKeep GetVaultKeepById(int id)
+        internal VaultKeepViewModel GetVaultKeepById(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        // internal VaultKeep GetVaultKeepById(int id, VaultKeep vk)
-        // {
-        //     string sql = @"
-        //     SELECT
-        //       vk.*
-        //       a.*  
-        //     FROM vault_keeps vk
-        //     JOIN accounts a ON a.id = vk.creatorId
-        //     WHERE vk.id = @id";
-        //     return _db.Query<VaultKeep, Account, VaultKeep>(sql, (vk, a) =>
-        //     {
-        //         vk.CreatorId = a;
-        //         return vk;
-        //     }, new { id }.FirstOrDefault());
-        // }
-
-        internal void Remove(int id)
-        {
-            string sql = "DELETE FROM vault_keeps WHERE id = @id LIMIT 1;";
-            _db.Execute(sql, new { id });
+            string sql = @"
+                SELECT
+                k.*,
+                v.name,
+                vk.id as vaultKeepId,
+                vk.keepId as keepId,
+                vk.vaultId as vaultId
+                FROM
+                vault_keeps vk
+                JOIN vaults v ON v.id = vk.vaultId
+                JOIN keeps k ON k.id = vk.keepId
+                WHERE
+                vk.vaultId = @id;";
+            return _db.Query<VaultKeepViewModel>(sql, new { id }).FirstOrDefault();
         }
 
         internal VaultKeep CreateVaultKeep(VaultKeep vk)
@@ -70,6 +62,11 @@ namespace Keepr.server.Repositories
 
             vk.Id = _db.ExecuteScalar<int>(sql, vk);
             return vk;
+        }
+        internal void Remove(int id)
+        {
+            string sql = "DELETE FROM vault_keeps WHERE id = @id LIMIT 1;";
+            _db.Execute(sql, new { id });
         }
     }
 }

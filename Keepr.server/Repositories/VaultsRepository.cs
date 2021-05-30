@@ -73,6 +73,21 @@ namespace Keepr.server.Repositories
             return v;
         }
 
+        internal List<Vault> GetVaultsByProfileId(string id)
+        {
+            string sql = @"
+            SELECT 
+            v.*,
+            a.*
+            FROM vaults v
+            JOIN accounts a ON a.id = v.creatorId
+            WHERE v.creatorId = @id AND isPrivate = 0;";
+            return _db.Query<Vault, Profile, Vault>(sql, (v, p) =>
+            {
+                v.Creator = p;
+                return v;
+            }, new { id }).ToList();
+        }
         internal void Remove(int id)
         {
             string sql = "DELETE FROM vaults WHERE id = @id LIMIT 1;";

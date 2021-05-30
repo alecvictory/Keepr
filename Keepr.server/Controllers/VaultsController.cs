@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CodeWorks.Auth0Provider;
@@ -57,11 +58,25 @@ namespace Keepr.server.Controllers
         // GET VAULTKEEP
 
         [HttpGet("{id}/keeps")]
-        public ActionResult<List<VaultKeep>> GetVaultKeeps(int id)
+        public async Task<ActionResult<List<VaultKeepViewModel>>> GetVaultKeeps(int id)
         {
             try
             {
-                List<VaultKeep> vaultkeeps = _vk.GetVaultKeeps(id);
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                Vault vault = _vs.GetVaultById(id);
+                List<VaultKeepViewModel> vaultkeeps = _vk.GetVaultKeeps(id);
+                if (userInfo == null && vault.IsPrivate == true)
+                {
+                    throw new Exception("You can't access a private vault");
+                }
+                if (vault.IsPrivate == true)
+                {
+                    if (userInfo.Id == vault.CreatorId)
+                    {
+                        return Ok(vaultkeeps);
+                    }
+                    throw new Exception("You can't access a private vault");
+                }
                 return Ok(vaultkeeps);
             }
             catch (System.Exception e)
