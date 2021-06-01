@@ -7,7 +7,9 @@
   </main>
   <footer>
     <div class="bg-dark text-light text-center p-4">
-      Made with 💖 by CodeWorks
+      <i class="fab fa-github text-light fa-2x" aria-hidden="true"></i><a class="github-link" href="http://www.github.com/alecvictory">
+        Alec Victory
+      </a>
     </div>
   </footer>
 </template>
