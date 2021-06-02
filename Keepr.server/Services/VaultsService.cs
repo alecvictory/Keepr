@@ -8,21 +8,21 @@ namespace Keepr.server.Services
     public class VaultsService
     {
 
-        private readonly VaultsRepository _vp;
+        private readonly VaultsRepository _vr;
 
-        public VaultsService(VaultsRepository vp)
+        public VaultsService(VaultsRepository vr)
         {
-            _vp = vp;
+            _vr = vr;
         }
 
         internal List<Vault> GetAllVaults()
         {
-            return _vp.GetAllVaults();
+            return _vr.GetAllVaults();
         }
 
         internal Vault GetVaultById(int id)
         {
-            var v = _vp.GetVaultById(id);
+            var v = _vr.GetVaultById(id);
             if (v == null)
             {
                 throw new Exception("Invalid Id");
@@ -33,12 +33,12 @@ namespace Keepr.server.Services
 
         internal Vault CreateVault(Vault v)
         {
-            return _vp.CreateVault(v);
+            return _vr.CreateVault(v);
         }
 
         internal Vault UpdateVault(Vault v, string id)
         {
-            Vault vault = _vp.GetVaultById(v.Id);
+            Vault vault = _vr.GetVaultById(v.Id);
 
             if (vault == null)
             {
@@ -48,7 +48,7 @@ namespace Keepr.server.Services
             {
                 throw new Exception("This is not your Vault to edit");
             }
-            return _vp.UpdateVault(v);
+            return _vr.UpdateVault(v);
         }
 
         internal void RemoveVault(int id, string userId)
@@ -59,16 +59,16 @@ namespace Keepr.server.Services
             {
                 throw new Exception("You are not the owner of this Vault");
             }
-            _vp.Remove(id);
+            _vr.Remove(id);
         }
 
         internal List<Vault> GetVaultsByProfileId(string id, string userInfoId)
         {
             if (id == userInfoId)
             {
-                return _vp.GetVaultsByProfileId(userInfoId);
+                return _vr.GetVaultsByProfileId(userInfoId);
             }
-            return _vp.GetVaultsByProfileId(id);
+            return _vr.GetVaultsByProfileId(id);
         }
     }
 }

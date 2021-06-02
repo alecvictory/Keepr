@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CodeWorks.Auth0Provider;
 using Keepr.server.Models;
 using Keepr.server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Keepr.server.Controllers
