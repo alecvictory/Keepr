@@ -36,6 +36,7 @@ export default {
       async getVaultById() {
         try {
           await vaultsService.getVaultById(props.vaultProp.id)
+          router.push(({ name: 'VaultPage', params: { id: props.vaultProp.id } }))
         } catch (error) {
           Notification.toast('Error: ' + error, 'error')
         }

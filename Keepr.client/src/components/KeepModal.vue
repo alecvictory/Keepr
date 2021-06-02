@@ -75,6 +75,7 @@ export default {
         try {
           if (await Notification.confirmAction('Are you sure?', "You won't be able to revert this!", 'warning', 'Yes, Remove Keep')) {
             await keepsService.removeKeep(state.activeKeep.id)
+            Notification.toast('Successfully Deleted Keep', 'success')
           }
         } catch (error) {
           Notification.toast('Error: ' + error, 'warning')

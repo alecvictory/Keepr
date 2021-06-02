@@ -1,23 +1,29 @@
 <template>
   <div class="keep card rounded shadow" v-if="keepProp">
     <!-- COME BACK HERE -->
-    <div title="Open Keep Modal"
-         @click="getKeepById"
-         type=""
-         class=""
-         data-toggle="modal"
-         :data-target="`#keep-modal` + keepProp.id"
-    >
-      <img class="card-img img-fluid" :src="keepProp.img" alt="" style="max-width:20rem;">
-      <div>
-        {{ keepProp.name }}
+    <div title="Open Keep Modal">
+      <img class="card-img img-fluid"
+           :src="keepProp.img"
+           alt=""
+           style="max-width:25rem;"
+           @click="getKeepById"
+           type=""
+           data-toggle="modal"
+           :data-target="`#keep-modal` + keepProp.id"
+      >
+      <div class="card-img-overlay d-flex justify-content-around text-white">
+        <div class="" @click="getKeepById">
+          {{ keepProp.name }}
+        </div>
+        <div>
+          <router-link :to="{name: 'ProfilePage', params: { id: keepProp.creator.id }}">
+            <img class="small-profile-image rounded-circle" :src="keepProp.creator.picture" alt="">
+          </router-link>
+        </div>
       </div>
     </div>
-    <router-link :to="{name: 'ProfilePage', params: { id: keepProp.creator.id }}">
-      <img class="small-profile-image rounded-circle" :src="keepProp.creator.picture" alt="">
-    </router-link>
-    <KeepModal />
   </div>
+  <KeepModal />
 </template>
 
 <script>
