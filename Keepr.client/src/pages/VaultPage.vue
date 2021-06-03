@@ -1,13 +1,20 @@
 <template>
   <div class="Vault container-fluid" v-if="state.activeVault">
     <div class="row">
-      {{ state.activeVault.name }}
+      <h1>
+        {{ state.activeVault.name }}
+      </h1>
     </div>
     <div class="row">
-      {{ state.activeVault.keeps }}
+      <div>
+        <p>Keeps:</p>  {{ state.vaultKeeps.length }}
+      </div>
     </div>
-    <div class="">
-      <button type="button" class="btn btn-danger" data-dismiss="modal" @click="removeVault">
+    <div class="row">
+      <VaultKeep v-for="keep in state.vaultKeeps" :key="keep.id" :keep-prop="keep" />
+    </div>
+    <div>
+      <button type="button" class="btn btn-danger" data-dismiss="modal" v-if="state.account.id == state.activeVault.creatorId" @click="removeVault">
         Delete
       </button>
     </div>
@@ -15,26 +22,36 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue'
+import { computed, reactive, onMounted } from 'vue'
 import { AppState } from '../AppState'
-import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { vaultsService } from '../services/VaultsService'
 import Notification from '../utils/Notification'
+import { keepsService } from '../services/KeepsService'
 export default {
   name: 'VaultPage',
   props: {
   },
   setup() {
-    const router = useRouter()
+    const route = useRoute()
     const state = reactive({
       user: computed(() => AppState.user),
       account: computed(() => AppState.account),
       activeVault: computed(() => AppState.activeVault),
-      vaultKeeps: computed(() => AppState.vaultKeeps)
+      vaultKeeps: computed(() => AppState.vaultKeeps),
+      keeps: computed(() => AppState.keeps)
+    })
+    onMounted(async() => {
+      try {
+        await vaultsService.getVaultById(route.params.id)
+        await keepsService.getKeepsByVaultId(route.params.id)
+      } catch (error) {
+        Notification.toast('Error: ' + error, 'warning')
+      }
     })
     return {
       state,
-      router,
+      route,
       async removeVault() {
         try {
           if (await Notification.confirmAction('Are you sure?', "You won't be able to revert this!", 'warning', 'Yes, Remove Vault')) {
