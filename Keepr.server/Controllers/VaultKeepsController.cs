@@ -39,14 +39,14 @@ namespace Keepr.server.Controllers
 
         // DELETE VAULTKEEP
 
-        [Authorize]
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<string>> RemoveVaultKeep(int id)
         {
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                _vk.RemoveVaultKeep(id, userInfo.Id);
+                _vk.RemoveVaultKeep(id, userInfo?.Id);
                 return Ok("Successfully Deleted");
             }
             catch (System.Exception e)

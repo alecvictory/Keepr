@@ -18,9 +18,9 @@ namespace Keepr.server.Services
         {
             return _vk.GetVaultKeeps(id);
         }
-        internal VaultKeepViewModel GetVaultKeepById(int id, VaultKeep vk)
+        internal VaultKeepViewModel GetVaultKeepById(int id)
         {
-            var v = _vk.GetVaultKeepById(id);
+            VaultKeepViewModel v = _vk.GetVaultKeepById(id);
             if (v == null)
             {
                 throw new Exception("Invalid Id");

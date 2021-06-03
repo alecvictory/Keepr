@@ -48,7 +48,7 @@ namespace Keepr.server.Repositories
                 JOIN vaults v ON v.id = vk.vaultId
                 JOIN keeps k ON k.id = vk.keepId
                 WHERE
-                vk.vaultId = @id;";
+                vk.Id = @id;";
             return _db.Query<VaultKeepViewModel>(sql, new { id }).FirstOrDefault();
         }
 

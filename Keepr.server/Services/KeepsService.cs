@@ -27,6 +27,8 @@ namespace Keepr.server.Services
             {
                 throw new Exception("Invalid Id");
             }
+            k.Views++;
+            k = _kp.UpdateKeep(k);
             return k;
         }
 
