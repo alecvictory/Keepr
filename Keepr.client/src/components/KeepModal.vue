@@ -25,7 +25,7 @@
             <div class="row pb-4">
               <div class="col d-flex justify-content-center">
                 <i class="fa fa-eye pr-2"></i><span class="pr-5">{{ state.activeKeep.views }}</span>
-                <i class="fab fa-kaggle pr-2"></i><span class="pr-5">{{ state.activeKeep.keeps }}</span>
+                <i class="fab fa-kaggle pr-2"></i><span class="pr-5">{{ state.activeKeep.length }}</span>
                 <i class="fa fa-share pr-2"></i><span class="">{{ state.activeKeep.shares }}</span>
               </div>
             </div>
@@ -54,9 +54,6 @@
               </button>
             </div>
           </form>
-          <button type="button" class="btn btn-primary btn-sm" v-if="state.account.id == state.activeKeep.creatorId" @click="removeKeepFromVault">
-            Remove from Vault
-          </button>
           <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" v-if="state.account.id == state.activeKeep.creatorId" @click="removeKeep">
             <i class="fa fa-trash" aria-hidden="true"></i>
           </button>
@@ -84,7 +81,7 @@ export default {
       activeKeep: computed(() => AppState.activeKeep),
       newVaultKeep: {},
       accountVaults: computed(() => AppState.accountVaults),
-      vaultKeeps: computed(() => AppState.vaultKeeps)
+      vaultKeeps: computed(() => AppState.vaultKeeps.filter(vk => vk.vaultKeepId))
     })
     return {
       state,
@@ -104,6 +101,16 @@ export default {
           state.newVaultKeep.keepId = state.activeKeep.id
           await keepsService.addVaultKeep(state.newVaultKeep)
           Notification.toast('Successfully Added Keep', 'success')
+        } catch (error) {
+          Notification.toast('Error: ' + error, 'warning')
+        }
+      },
+      async removeKeepFromVault() {
+        try {
+          if (await Notification.confirmAction('Are you sure?', "You won't be able to revert this!", 'warning', 'Yes, Remove Keep')) {
+            await keepsService.removeKeepFromVault(state.vaultKeeps)
+            Notification.toast('Successfully Removed Keep', 'success')
+          }
         } catch (error) {
           Notification.toast('Error: ' + error, 'warning')
         }

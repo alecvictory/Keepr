@@ -1,6 +1,6 @@
 <template>
   <div class="keep card rounded shadow" v-if="vaultProp" @click="getVaultById()">
-    <img class="card-img img-fluid" :src="vaultProp.img" alt="" style="max-width:20rem;">
+    <img class="card-img img-fluid" src="www.placehold.it/150x150" alt="" style="max-width:20rem;">
     <div>
       {{ vaultProp.name }}
     </div>

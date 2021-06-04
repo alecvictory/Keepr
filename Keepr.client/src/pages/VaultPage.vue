@@ -11,7 +11,11 @@
       </div>
     </div>
     <div class="row">
-      <VaultKeep v-for="keep in state.vaultKeeps" :key="keep.id" :keep-prop="keep" />
+      <div class="col">
+        <div class="card-columns m-2">
+          <VaultKeep v-for="keep in state.vaultKeeps" :key="keep.id" :keep-prop="keep" />
+        </div>
+      </div>
     </div>
     <div>
       <button type="button" class="btn btn-danger" data-dismiss="modal" v-if="state.account.id == state.activeVault.creatorId" @click="removeVault">
@@ -31,8 +35,12 @@ import { keepsService } from '../services/KeepsService'
 export default {
   name: 'VaultPage',
   props: {
+    keepProp: {
+      type: Object,
+      required: true
+    }
   },
-  setup() {
+  setup(props) {
     const route = useRoute()
     const state = reactive({
       user: computed(() => AppState.user),

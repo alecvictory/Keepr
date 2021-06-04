@@ -38,5 +38,9 @@ class KeepsService {
   async removeKeep(id) {
     await api.delete(`api/keeps/${id}`)
   }
+
+  async removeKeepFromVault(vaultKeepId) {
+    await api.delete(`api/vaultkeeps/${vaultKeepId}`)
+  }
 }
 export const keepsService = new KeepsService()
