@@ -98,16 +98,18 @@ namespace Keepr.server
 
             app.UseHttpsRedirection();
 
+            // Build and deploy client
             app.UseStaticFiles();
-
             app.UseDefaultFiles();
 
             app.UseRouting();
 
             // TODO[epic=Auth] Add Authenentication so bearer gets validated
             app.UseAuthentication();
-
             app.UseAuthorization();
+            // build and deploy client
+            // app.UseDefaultFiles();
+            // app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
