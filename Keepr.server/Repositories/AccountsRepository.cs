@@ -12,7 +12,6 @@ namespace Keepr.server.Repositories
         {
             _db = db;
         }
-
         internal Account GetByEmail(string userEmail)
         {
             string sql = "SELECT * FROM Accounts WHERE email = @userEmail";

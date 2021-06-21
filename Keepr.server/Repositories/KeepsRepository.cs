@@ -16,7 +16,7 @@ namespace Keepr.server.Repositories
         {
             _db = db;
         }
-
+        // NOTE This function is to get all the Keeps
         internal List<Keep> GetAllKeeps()
         {
             string sql = @"
@@ -31,7 +31,7 @@ namespace Keepr.server.Repositories
                 return k;
             }, splitOn: "id").ToList();
         }
-
+        // NOTE this function is getting a keep by passing it's ID 
         internal Keep GetKeepById(int id)
         {
             string sql = @"
@@ -47,6 +47,7 @@ namespace Keepr.server.Repositories
                 return k;
             }, new { id }).FirstOrDefault();
         }
+        // NOTE this function is creating a new keep
 
         internal Keep CreateKeep(Keep k)
         {
@@ -58,7 +59,7 @@ namespace Keepr.server.Repositories
             k.Id = _db.ExecuteScalar<int>(sql, k);
             return k;
         }
-
+        // NOTE this function is getting keeps by a profile ID by passing the profile ID
         internal List<Keep> GetKeepsByProfileId(string id)
         {
             string sql = @"
@@ -74,7 +75,7 @@ namespace Keepr.server.Repositories
                 return k;
             }, new { id }).ToList();
         }
-
+        // NOTE this function is editing a Keep
         internal Keep UpdateKeep(Keep k)
         {
             string sql = @"
@@ -87,7 +88,7 @@ namespace Keepr.server.Repositories
             _db.Execute(sql, k);
             return k;
         }
-
+        // NOTE this function is deleting a Keep by passing it's ID
         internal void Remove(int id)
         {
             string sql = "DELETE FROM keeps WHERE id = @id LIMIT 1;";

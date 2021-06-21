@@ -17,6 +17,7 @@ namespace Keepr.server.Repositories
             _db = db;
         }
 
+        // NOTE This function is to get all the vaults
         internal List<Vault> GetAllVaults()
         {
             string sql = @"
@@ -31,7 +32,7 @@ namespace Keepr.server.Repositories
                 return v;
             }, splitOn: "id").ToList();
         }
-
+        // NOTE this function is getting a vault by passing it's ID 
         internal Vault GetVaultById(int id)
         {
             string sql = @"
@@ -48,7 +49,7 @@ namespace Keepr.server.Repositories
             }, new { id }).FirstOrDefault();
 
         }
-
+        // NOTE this function is creating a new vault
         internal Vault CreateVault(Vault v)
         {
             string sql = @"
@@ -59,7 +60,7 @@ namespace Keepr.server.Repositories
             v.Id = _db.ExecuteScalar<int>(sql, v);
             return v;
         }
-
+        // NOTE this function is editing a vault
         internal Vault UpdateVault(Vault v)
         {
             string sql = @"
@@ -72,6 +73,7 @@ namespace Keepr.server.Repositories
             _db.Execute(sql, v);
             return v;
         }
+        // NOTE This function is getting all the vaults by profile by passing a profile ID
         internal List<Vault> GetVaultsByProfileId(string id)
         {
             string sql = @"
@@ -87,6 +89,7 @@ namespace Keepr.server.Repositories
                 return v;
             }, new { id }).ToList();
         }
+        // NOTE This function is deleting a vault by passing it's ID
         internal void Remove(int id)
         {
             string sql = "DELETE FROM vaults WHERE id = @id LIMIT 1;";

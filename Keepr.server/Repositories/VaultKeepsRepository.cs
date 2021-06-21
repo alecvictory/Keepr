@@ -15,7 +15,7 @@ namespace Keepr.server.Repositories
         {
             _db = db;
         }
-
+        // NOTE This function is to get all the VaultKeeps
         internal List<VaultKeepViewModel> GetVaultKeeps(int id)
         {
             string sql = @"
@@ -33,6 +33,7 @@ namespace Keepr.server.Repositories
                 vk.vaultId = @id;";
             return _db.Query<VaultKeepViewModel>(sql, new { id }).ToList();
         }
+        // NOTE this function is getting a VaultKeep by passing it's ID 
 
         internal VaultKeepViewModel GetVaultKeepById(int id)
         {
@@ -51,7 +52,7 @@ namespace Keepr.server.Repositories
                 vk.Id = @id;";
             return _db.Query<VaultKeepViewModel>(sql, new { id }).FirstOrDefault();
         }
-
+        // NOTE this function is creating a new VaultKeep
         internal VaultKeep CreateVaultKeep(VaultKeep vk)
         {
             string sql = @"INSERT INTO 
@@ -63,6 +64,7 @@ namespace Keepr.server.Repositories
             vk.Id = _db.ExecuteScalar<int>(sql, vk);
             return vk;
         }
+        // NOTE this function is deleting a VaultKeep by it's ID
         internal void Remove(int id)
         {
             string sql = "DELETE FROM vault_keeps WHERE id = @id LIMIT 1;";
